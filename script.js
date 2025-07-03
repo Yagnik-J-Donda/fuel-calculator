@@ -50,3 +50,42 @@ window.addEventListener('load', () => {
         themeLabel.textContent = "Dark Mode";
     }
 });
+
+// === OCR: Extract Text from Uploaded Image ===
+const uploadInput = document.getElementById('upload');
+
+uploadInput.addEventListener('change', () => {
+    if (uploadInput.files && uploadInput.files[0]) {
+        const imageFile = uploadInput.files[0];
+
+        // Use Tesseract.js to recognize text from image
+        Tesseract.recognize(
+            imageFile,           // Image file
+            'eng',               // Language: English
+            { logger: m => console.log(m) } // Progress logger
+        ).then(({ data: { text } }) => {
+            console.log("Extracted Text:", text);
+
+            // Try to parse Distance, Mileage, and Time from text
+            const distanceMatch = text.match(/distance[:\s]*([\d.]+)/i);
+            const mileageMatch = text.match(/mileage[:\s]*([\d.]+)/i);
+            const timeMatch = text.match(/time[:\s]*([\d:]+)/i);
+
+            if (distanceMatch) {
+                document.getElementById('distance').value = parseFloat(distanceMatch[1]);
+            }
+            if (mileageMatch) {
+                document.getElementById('mileage').value = parseFloat(mileageMatch[1]);
+            }
+            if (timeMatch) {
+                alert(`Trip Time Detected: ${timeMatch[1]}`);
+            }
+
+            // Notify user
+            document.getElementById('result').innerHTML = "✅ Details extracted. Review and click Calculate!";
+        }).catch(err => {
+            console.error(err);
+            alert("❌ Failed to extract text from image.");
+        });
+    }
+});

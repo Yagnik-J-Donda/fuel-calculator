@@ -27,12 +27,22 @@
         <input type="number" id="mileage" placeholder="Mileage (L/100km)">
         <input type="number" id="price" placeholder="Fuel Price per Liter" value="1.35">
 
+        <!-- Upload or Capture Photo -->
+        <div class="upload-section">
+            <label for="upload">Upload Dashboard Photo:</label>
+            <input type="file" id="upload" accept="image/*" capture="environment">
+            <p><small>Tip: You can also take a photo directly.</small></p>
+        </div>
+
         <!-- Calculate button -->
         <button onclick="calculateCost()">Calculate</button>
 
         <!-- Display result here -->
         <div id="result"></div>
     </div>
+
+    <!-- === Tesseract.js Library for OCR (Text Extraction from Images) === -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
 
     <!-- Link to external JavaScript file -->
     <script src="script.js"></script>

@@ -132,3 +132,21 @@ input:checked + .slider {
 input:checked + .slider:before {
     transform: translateX(26px);
 }
+
+/* === Upload Section Container === */
+.upload-section {
+    margin-top: 20px;           /* Add space above the upload section */
+    text-align: center;         /* Center align all content inside upload section */
+}
+
+/* === Label Styling for Upload Section === */
+.upload-section label {
+    font-weight: bold;          /* Make the label text bold */
+    margin-bottom: 5px;         /* Add space below the label */
+    display: block;             /* Make label take full width for proper spacing */
+}
+
+/* === File Input Styling === */
+.upload-section input[type="file"] {
+    margin: 10px auto;          /* Add vertical space and center the file input horizontally */
+}
