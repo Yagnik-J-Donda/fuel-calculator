@@ -4,17 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fuel Cost Calculator</title>
+    <!-- Link to external CSS file -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Dark Mode Toggle Switch -->
+    <div class="theme-toggle">
+        <label class="switch">
+            <input type="checkbox" id="darkModeToggle">
+            <span class="slider round"></span>
+        </label>
+        <span id="themeLabel">Light Mode</span>
+    </div>
+
+    <!-- Heading -->
     <h1>Fuel Cost Calculator</h1>
+
+    <!-- Main container for inputs and result -->
     <div class="container">
+        <!-- Input fields for distance, mileage, and price -->
         <input type="number" id="distance" placeholder="Distance (km)">
         <input type="number" id="mileage" placeholder="Mileage (L/100km)">
         <input type="number" id="price" placeholder="Fuel Price per Liter" value="1.35">
+
+        <!-- Calculate button -->
         <button onclick="calculateCost()">Calculate</button>
+
+        <!-- Display result here -->
         <div id="result"></div>
     </div>
+
+    <!-- Link to external JavaScript file -->
     <script src="script.js"></script>
 </body>
 </html>
