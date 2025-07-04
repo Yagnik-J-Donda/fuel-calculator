@@ -1,11 +1,11 @@
-// === Fuel Cost Calculation Function ===
+// === Fuel Cost Calculation ===
 function calculateCost() {
-    // Get user inputs and convert them to numbers
-    let distance = parseFloat(document.getElementById('distance').value);
-    let mileage = parseFloat(document.getElementById('mileage').value);
+    // Get user inputs
+    let distance = parseFloat(document.getElementById('tripDistance').value);
+    let mileage = parseFloat(document.getElementById('tripAverage').value);
     let price = parseFloat(document.getElementById('price').value);
 
-    // Validate inputs (check if all fields are filled correctly)
+    // Validate inputs
     if (isNaN(distance) || isNaN(mileage) || isNaN(price)) {
         document.getElementById('result').innerHTML = "⚠️ Please fill all fields correctly.";
         return;
@@ -15,7 +15,7 @@ function calculateCost() {
     let fuelUsed = (distance * mileage) / 100;
     let totalCost = fuelUsed * price;
 
-    // Display the result
+    // Display result
     document.getElementById('result').innerHTML = `
         <strong>Fuel Used:</strong> ${fuelUsed.toFixed(2)} liters<br>
         <strong>Total Cost:</strong> $${totalCost.toFixed(2)}
@@ -23,69 +23,122 @@ function calculateCost() {
 }
 
 // === Dark Mode Toggle ===
-const toggle = document.getElementById('darkModeToggle'); // Get the toggle switch
-const themeLabel = document.getElementById('themeLabel'); // Get label to show current mode
+const toggle = document.getElementById('darkModeToggle');
+const themeLabel = document.getElementById('themeLabel');
 
-// When toggle is changed
 toggle.addEventListener('change', () => {
-    // Toggle dark-mode class on body
     document.body.classList.toggle('dark-mode');
-
-    // Update label text
     themeLabel.textContent = document.body.classList.contains('dark-mode') ? "Dark Mode" : "Light Mode";
-
-    // Save user preference in localStorage
     localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
 });
 
-// === Load Saved Theme on Page Load ===
 window.addEventListener('load', () => {
-    // Get saved theme from localStorage
     const savedTheme = localStorage.getItem('theme');
-
-    // Apply saved theme if it exists
     if (savedTheme === 'dark') {
         document.body.classList.add('dark-mode');
-        toggle.checked = true; // Set toggle to ON
+        toggle.checked = true;
         themeLabel.textContent = "Dark Mode";
     }
 });
 
 // === OCR: Extract Text from Uploaded Image ===
 const uploadInput = document.getElementById('upload');
+const progressOverlay = document.getElementById('progressOverlay');
+const progressText = document.getElementById('progressText');
 
 uploadInput.addEventListener('change', () => {
     if (uploadInput.files && uploadInput.files[0]) {
         const imageFile = uploadInput.files[0];
 
-        // Use Tesseract.js to recognize text from image
+        // Show overlay
+        progressOverlay.classList.add('show');
+        progressText.textContent = "🔄 Extracting data… 0%";
+
+
+        async function cropDashboardArea(imageFile) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    // Set canvas size to cropped area
+                    // Adjust these values as per your dashboard screen position
+                    canvas.width = img.width * 0.5;  // width of the cropped box (50%)
+                    canvas.height = img.height * 0.3; // height of the cropped box (30%)
+
+                    // Start crop at X=25%, Y=35% of original image
+                    const cropX = img.width * 0.25;
+                    const cropY = img.height * 0.35;
+
+                    ctx.drawImage(
+                        img,
+                        cropX, cropY, // start point
+                        canvas.width, canvas.height, // crop width/height
+                        0, 0, canvas.width, canvas.height // destination
+                    );
+
+                    canvas.toBlob(resolve, 'image/jpeg');
+                };
+                img.onerror = reject;
+                img.src = URL.createObjectURL(imageFile);
+            });
+        }
+
         Tesseract.recognize(
-            imageFile,           // Image file
-            'eng',               // Language: English
-            { logger: m => console.log(m) } // Progress logger
+            imageFile,
+            'eng',
+            {
+                logger: m => {
+                    if (m.status === "recognizing text") {
+                        const percent = Math.round(m.progress * 100);
+                        progressText.textContent = `🔄 Extracting data… ${percent}%`;
+                    }
+                }
+            }
         ).then(({ data: { text } }) => {
             console.log("Extracted Text:", text);
 
-            // Try to parse Distance, Mileage, and Time from text
-            const distanceMatch = text.match(/distance[:\s]*([\d.]+)/i);
-            const mileageMatch = text.match(/mileage[:\s]*([\d.]+)/i);
-            const timeMatch = text.match(/time[:\s]*([\d:]+)/i);
+            // Display raw extracted text in debug box
+            document.getElementById('rawText').textContent = text.trim() || "No data extracted.";
 
+            let cleanText = text.toLowerCase().replace(/\s+/g, ' ');
+            console.log("Cleaned Text:", cleanText);
+
+            let filled = false;
+
+            const distanceMatch = cleanText.match(/tripdistance\s*[:=]?\s*([\d.]+)/);
             if (distanceMatch) {
-                document.getElementById('distance').value = parseFloat(distanceMatch[1]);
-            }
-            if (mileageMatch) {
-                document.getElementById('mileage').value = parseFloat(mileageMatch[1]);
-            }
-            if (timeMatch) {
-                alert(`Trip Time Detected: ${timeMatch[1]}`);
+                document.getElementById('tripDistance').value = parseFloat(distanceMatch[1]);
+                filled = true;
             }
 
-            // Notify user
-            document.getElementById('result').innerHTML = "✅ Details extracted. Review and click Calculate!";
+            const mileageMatch = cleanText.match(/tripaverage\s*[:=]?\s*([\d.]+)/);
+            if (mileageMatch) {
+                document.getElementById('tripAverage').value = parseFloat(mileageMatch[1]);
+                filled = true;
+            }
+
+            const timeMatch = cleanText.match(/triptime\s*[:=]?\s*([\d:]+)/);
+            if (timeMatch) {
+                document.getElementById('tripTime').value = timeMatch[1];
+            }
+
+            if (filled) {
+                progressText.textContent = "✅ Data extracted successfully!";
+                calculateCost();
+            } else {
+                progressText.textContent = "⚠️ Data extracted but no matching fields found.";
+            }
+
         }).catch(err => {
             console.error(err);
-            alert("❌ Failed to extract text from image.");
+            progressText.textContent = "❌ Failed to extract data from photo.";
+        }).finally(() => {
+            setTimeout(() => {
+                progressOverlay.classList.remove('show'); // Hide overlay smoothly
+                uploadInput.value = ''; // Clear file input
+            }, 2000); // Wait 2s before fading out
         });
     }
 });

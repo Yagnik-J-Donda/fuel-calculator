@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fuel Cost Calculator</title>
-    <!-- Link to external CSS file -->
+    <!-- Link to external CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Dark Mode Toggle Switch -->
+    <!-- Dark Mode Toggle -->
     <div class="theme-toggle">
         <label class="switch">
             <input type="checkbox" id="darkModeToggle">
@@ -20,31 +20,49 @@
     <!-- Heading -->
     <h1>Fuel Cost Calculator</h1>
 
-    <!-- Main container for inputs and result -->
+    <!-- Main Container -->
     <div class="container">
-        <!-- Input fields for distance, mileage, and price -->
-        <input type="number" id="distance" placeholder="Distance (km)">
-        <input type="number" id="mileage" placeholder="Mileage (L/100km)">
+        <!-- Trip Distance -->
+        <input type="number" id="tripDistance" placeholder="Trip Distance (km)">
+        
+        <!-- Trip Average -->
+        <input type="number" id="tripAverage" placeholder="Trip Average (L/100km)">
+        
+        <!-- Fuel Price -->
         <input type="number" id="price" placeholder="Fuel Price per Liter" value="1.35">
+        
+        <!-- Trip Time (display only) -->
+        <input type="text" id="tripTime" placeholder="Trip Time (hh:mm:ss)" readonly>
 
-        <!-- Upload or Capture Photo -->
+        <!-- Upload Dashboard Photo -->
         <div class="upload-section">
             <label for="upload">Upload Dashboard Photo:</label>
             <input type="file" id="upload" accept="image/*" capture="environment">
             <p><small>Tip: You can also take a photo directly.</small></p>
         </div>
 
-        <!-- Calculate button -->
+        <!-- Calculate Button -->
         <button onclick="calculateCost()">Calculate</button>
 
-        <!-- Display result here -->
+        <!-- Result Display -->
         <div id="result"></div>
     </div>
 
-    <!-- === Tesseract.js Library for OCR (Text Extraction from Images) === -->
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+    <!-- Raw Extracted Text Debug Box -->
+    <div id="debugBox" class="debug-box">
+        <h3>Raw Extracted Text (Debug)</h3>
+        <pre id="rawText">No data yet.</pre>
+    </div>
 
-    <!-- Link to external JavaScript file -->
+
+    <!-- Fullscreen Overlay for OCR Progress -->
+    <div id="progressOverlay">
+        <div id="progressText">Extracting data… 0%</div>
+    </div>
+
+    <!-- OCR Library: Tesseract.js -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+    <!-- Custom Script -->
     <script src="script.js"></script>
 </body>
 </html>

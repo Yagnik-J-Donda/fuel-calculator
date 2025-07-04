@@ -1,42 +1,40 @@
 /* === Base Styles === */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f4f8; /* Light background */
-    color: #333;               /* Light text color */
+    background-color: #f0f4f8;
+    color: #333;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: background-color 0.3s, color 0.3s; /* Smooth theme transition */
+    transition: background-color 0.3s, color 0.3s;
 }
 
-/* === Dark Mode Styles === */
 body.dark-mode {
-    background-color: #121212; /* Dark background */
-    color: #f0f0f0;            /* Light text color */
+    background-color: #121212;
+    color: #f0f0f0;
 }
 
-/* Heading Styles */
+/* Heading */
 h1 {
-    color: #4CAF50; /* Green accent */
+    color: #4CAF50;
     margin-top: 30px;
 }
 
-/* Container Styles */
+/* Main Container */
 .container {
-    background: white; /* Light background */
+    background: white;
     padding: 20px 30px;
     border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2); /* Subtle shadow */
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
     margin-top: 20px;
     text-align: center;
-    transition: background 0.3s, color 0.3s; /* Smooth theme transition */
+    transition: background 0.3s, color 0.3s;
 }
 
-/* Dark Mode container */
 body.dark-mode .container {
-    background: #1e1e1e; /* Dark container */
+    background: #1e1e1e;
     color: #f0f0f0;
 }
 
@@ -51,11 +49,18 @@ input {
     font-size: 16px;
 }
 
-/* Button Styles */
+/* Readonly input (Trip Time) */
+input[readonly] {
+    background-color: #f2f2f2;
+    color: #777;
+    cursor: not-allowed;
+}
+
+/* Button */
 button {
     width: 270px;
     padding: 10px;
-    background-color: #4CAF50; /* Green background */
+    background-color: #4CAF50;
     border: none;
     color: white;
     font-size: 16px;
@@ -64,18 +69,40 @@ button {
     margin-top: 10px;
 }
 
-/* Button hover effect */
 button:hover {
-    background-color: #45a049; /* Darker green on hover */
+    background-color: #45a049;
 }
 
-/* Result text */
+/* Result */
 #result {
     margin-top: 20px;
     font-size: 18px;
 }
 
-/* === Theme Toggle Switch Styles === */
+/* Upload Section */
+.upload-section {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.upload-section label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.upload-section input[type="file"] {
+    margin: 10px auto;
+}
+
+/* Loading Indicator */
+#loading {
+    color: #4CAF50;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Theme Toggle Switch */
 .theme-toggle {
     position: absolute;
     top: 15px;
@@ -85,7 +112,6 @@ button:hover {
     gap: 10px;
 }
 
-/* Switch container */
 .switch {
     position: relative;
     display: inline-block;
@@ -93,14 +119,12 @@ button:hover {
     height: 24px;
 }
 
-/* Hide default checkbox */
 .switch input {
     opacity: 0;
     width: 0;
     height: 0;
 }
 
-/* Slider background */
 .slider {
     position: absolute;
     cursor: pointer;
@@ -110,7 +134,6 @@ button:hover {
     border-radius: 24px;
 }
 
-/* Slider knob */
 .slider:before {
     position: absolute;
     content: "";
@@ -123,30 +146,70 @@ button:hover {
     border-radius: 50%;
 }
 
-/* When switch is ON */
 input:checked + .slider {
-    background-color: #4CAF50; /* Green background */
+    background-color: #4CAF50;
 }
 
-/* Move slider knob when ON */
 input:checked + .slider:before {
     transform: translateX(26px);
 }
 
-/* === Upload Section Container === */
-.upload-section {
-    margin-top: 20px;           /* Add space above the upload section */
-    text-align: center;         /* Center align all content inside upload section */
+/* === Fullscreen Progress Overlay === */
+#progressOverlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
+    color: #fff;
+    display: none; /* Hidden by default */
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    font-size: 2em;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.5s ease;
 }
 
-/* === Label Styling for Upload Section === */
-.upload-section label {
-    font-weight: bold;          /* Make the label text bold */
-    margin-bottom: 5px;         /* Add space below the label */
-    display: block;             /* Make label take full width for proper spacing */
+#progressOverlay.show {
+    display: flex;
+    opacity: 1;
 }
 
-/* === File Input Styling === */
-.upload-section input[type="file"] {
-    margin: 10px auto;          /* Add vertical space and center the file input horizontally */
+#progressText {
+    animation: pulse 1.2s infinite;
 }
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* === Debug Box === */
+.debug-box {
+    margin-top: 20px;
+    width: 90%;
+    max-width: 600px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    font-family: monospace;
+    color: #333;
+    overflow-x: auto;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .debug-box {
+    background-color: #1e1e1e;
+    color: #f0f0f0;
+    border-color: #444;
+}
+
+.debug-box h3 {
+    margin-top: 0;
+    font-size: 1.1em;
+    color: #4CAF50;
+}
+
