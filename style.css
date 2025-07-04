@@ -23,13 +23,25 @@ h1 {
 }
 
 /* Main Container */
-.container {
+/* .container {
     background: white;
     padding: 20px 30px;
     border-radius: 8px;
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     margin-top: 20px;
     text-align: center;
+    transition: background 0.3s, color 0.3s;
+} */
+
+.container {
+    background: white;
+    padding: 20px 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    margin: 20px auto;
+    text-align: center;
+    width: 90%;
+    max-width: 500px; /* Limit width on large screens */
     transition: background 0.3s, color 0.3s;
 }
 
@@ -38,15 +50,18 @@ body.dark-mode .container {
     color: #f0f0f0;
 }
 
-/* Input Fields */
+/* === Input Fields === */
 input {
     display: block;
-    width: 250px;
+    width: 100%; /* Take full width of parent container */
+    max-width: 400px; /* Prevent stretching too much on large screens */
     padding: 10px;
     margin: 10px auto;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
+    box-sizing: border-box; /* Include padding/border in width */
+    transition: all 0.3s ease; /* Smooth transitions for focus or theme */
 }
 
 /* Readonly input (Trip Time) */
@@ -54,7 +69,24 @@ input[readonly] {
     background-color: #f2f2f2;
     color: #777;
     cursor: not-allowed;
+    opacity: 0.8; /* Subtle transparency for disabled look */
 }
+
+/* === Responsive Tweaks === */
+@media (max-width: 600px) {
+    input {
+        font-size: 14px; /* Slightly smaller font for small screens */
+        padding: 8px;
+    }
+}
+
+@media (min-width: 1200px) {
+    input {
+        font-size: 18px; /* Slightly larger font on big screens */
+        padding: 12px;
+    }
+}
+
 
 /* Button */
 button {
@@ -112,6 +144,12 @@ button:hover {
     gap: 10px;
 }
 
+@media (max-width: 400px) {
+    .theme-toggle {
+        transform: scale(0.85);
+    }
+}
+    
 .switch {
     position: relative;
     display: inline-block;
@@ -189,27 +227,100 @@ input:checked + .slider:before {
 /* === Debug Box === */
 .debug-box {
     margin-top: 20px;
-    width: 90%;
-    max-width: 600px;
+    width: 95%; /* More flexible on small screens */
+    max-width: 700px; /* Slightly wider for large displays */
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 8px;
-    padding: 10px;
+    padding: 12px; /* Better spacing */
     font-family: monospace;
     color: #333;
-    overflow-x: auto;
+    overflow-x: auto; /* Allows horizontal scrolling if content overflows */
+    word-wrap: break-word; /* Prevents breaking layouts with long text */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease; /* Smooth transitions for theme changes */
 }
 
+/* Dark Mode Styling */
 body.dark-mode .debug-box {
     background-color: #1e1e1e;
     color: #f0f0f0;
     border-color: #444;
 }
 
+/* Heading inside Debug Box */
 .debug-box h3 {
     margin-top: 0;
-    font-size: 1.1em;
+    margin-bottom: 10px;
+    font-size: 1.2em; /* Slightly larger heading */
     color: #4CAF50;
+    border-bottom: 1px solid #4CAF50; /* Subtle underline for clarity */
+    padding-bottom: 5px;
 }
+
+/* 📱 Responsive Tweaks */
+@media (max-width: 600px) {
+    .debug-box {
+        font-size: 14px; /* Slightly smaller font on mobile */
+        padding: 8px;    /* Tighter spacing for compact screens */
+    }
+
+    .debug-box h3 {
+        font-size: 1.1em;
+    }
+}
+
+@media (min-width: 1200px) {
+    .debug-box {
+        max-width: 800px; /* Wider for large monitors */
+        padding: 16px;
+        font-size: 16px;  /* Slightly larger font for readability */
+    }
+}
+
+
+/* === Responsive Styles === */
+@media (max-width: 768px) {
+    body {
+        font-size: 16px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+    }
+
+    button {
+        font-size: 15px;
+        padding: 10px;
+    }
+
+    #progressOverlay {
+        font-size: 1.5em;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        font-size: 15px;
+    }
+
+    h1 {
+        font-size: 1.6em;
+    }
+
+    .container {
+        padding: 15px 20px;
+    }
+
+    input, button {
+        font-size: 14px;
+    }
+
+    .theme-toggle {
+        top: 10px;
+        right: 10px;
+        transform: scale(0.9);
+    }
+}
+
 
