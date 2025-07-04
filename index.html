@@ -35,11 +35,21 @@
         <input type="text" id="tripTime" placeholder="Trip Time (hh:mm:ss)" readonly>
 
         <!-- Upload Dashboard Photo -->
-        <div class="upload-section">
+        <!-- <div class="upload-section">
             <label for="upload">Upload Dashboard Photo:</label>
             <input type="file" id="upload" accept="image/*" capture="environment">
             <p><small>Tip: You can also take a photo directly.</small></p>
-        </div>
+        </div> -->
+
+        <!-- 📂 Upload or Take Photo Input -->
+        <label for="upload">Upload or Take Photo:</label>
+
+        <!-- 🔥 Removed 'capture="environment"' so mobile shows both gallery & camera -->
+        <input type="file" id="upload" accept="image/*">
+
+        <!-- 💬 User guidance text -->
+        <p><small>Tip: You can select from your gallery or take a photo directly.</small></p>
+
 
         <!-- Calculate Button -->
         <button onclick="calculateCost()">Calculate</button>
@@ -53,7 +63,6 @@
         <h3>Raw Extracted Text (Debug)</h3>
         <pre id="rawText">No data yet.</pre>
     </div>
-
 
     <!-- Fullscreen Overlay for OCR Progress -->
     <div id="progressOverlay">
